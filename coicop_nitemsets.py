@@ -2,6 +2,10 @@ from coppredict import preprocessing as pr
 from coppredict.patricia import Patricia
 from coppredict import evaluation as ev
 from coppredict import prediction as pdt
+from coppredict import util
+from ast import literal_eval
+
+from pprint import pprint
 
 import numpy as np
 
@@ -9,6 +13,8 @@ np.random.seed(10)
 
 path = './patterns'
 filename = 'Results_ps_f_spmf_at_274132_bank_full_sizek_rt_50_.txt'
+# filename = 'Results_ps_f_spmf_at_975_NYC_rt_90_.txt'
+
 df_patterns = pr.load_patterns_file(path, filename)
 print(df_patterns)
 
@@ -37,10 +43,10 @@ for i in range(len(train)):
 time_end = ev.get_time()
 mem_end = ev.get_process_memory()
 
-# ev.get_time_build(time_start, time_end, "Patricia built in ")
-# ev.get_memory_build(mem_start, mem_end, "Patricia built using ")
+print(ev.get_time_build(time_start, time_end, "Patricia built in "))
+print(ev.get_memory_build(mem_start, mem_end, "Patricia built using "))
 
-# print(X_trie._data)
+pprint(X_trie._data)
 # print(X_trie._data['C1'])
 
 validate = pdt.prepare_validation_data(validate)
@@ -56,16 +62,15 @@ cases, confidences, coverage = pdt.prediction(1, 10, 0.05, validate, X_trie)
 time_end = ev.get_time()
 mem_end = ev.get_process_memory()
 
+print(confidences)
 
-# print(confidences)
-
-# print(coverage)
+print(coverage)
 
 # casos válidos
 
-# print(cases)
+print(cases)
 
-# ev.print_time_build(time_start, time_end, "Prediction in ")
+print(ev.get_time_build(time_start, time_end, "Prediction in "))
 
-# ev.printMemoryBuild(mem_start, mem_end, "Prediction using ")
+print(ev.get_memory_build(mem_start, mem_end, "Prediction using "))
 
