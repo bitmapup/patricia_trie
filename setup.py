@@ -3,7 +3,7 @@ import setuptools
 
 
 setup(
-    name='recstersp',  # Temporary package name
+    name='coppredict',
     version='1.0.0',
     description='Recommender Systems using Temporal Restricted Sequential Patterns',
     url='',
@@ -13,13 +13,12 @@ setup(
     maintainer_email=['hsamame@pucp.edu.pe', 'ye.maeharaa@up.edu.pe'],
     packages=setuptools.find_packages(),
     license="MIT",
-    install_requires=['pandas', 'numpy', 'ast', 'psutil', 'IPython'],
+    install_requires=['pandas', 'numpy', 'psutil', 'IPython'],
     zip_safe=False,
     classifiers=[
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: MIT License"
     ],
-    python_requires='>=2.7'
+    python_requires='>=3.*'
 )
