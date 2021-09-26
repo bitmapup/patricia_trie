@@ -14,21 +14,28 @@ def split_train_validation(df, train_ratio):
 
 
 def prepare_validation_data(df):
-    df = df.reset_index(drop=True)
-    df['last_item'] = ''
-    df['aux_pattern'] = ''
-    df['convert_pattern'] = ''
-    df = df.astype(object)
+    """
+    Description:
+    Finds the value of each one of the prediction candidates of the target pattern, and
+    get the n_top predictions. Returns a dataframe with the results
 
-    for i in range(len(df)):
-        element = df.loc[i, "patterns"]
+    """
+    values = df.values.tolist()
+    validation_data = []
+    labels = ["patterns", "supp", "%supp", "len", "weight", 'last_item', 'aux_pattern', 'convert_pattern']
+    for row in values:
+        element = row[0]
         last_item = element[-1:]
         without_last_item = element[:-1]
-        df.iloc[i, 5] = pr.convert_pattern_to_string(last_item)
-        df.iloc[i, 6] = pr.convert_pattern_to_string(without_last_item)
-        df.iloc[i, 7] = pr.convert_pattern_to_string(element)
+        validation_data.append(pd.Series([row[0], row[1], row[2], row[3], row[4],
+                                          pr.convert_pattern_to_string(last_item),
+                                          pr.convert_pattern_to_string(without_last_item),
+                                          pr.convert_pattern_to_string(element)],
+                                         index=labels))
 
-    return df
+    df_validate = pd.DataFrame(columns=labels).append(validation_data, ignore_index=True)
+
+    return df_validate
 
 
 def predict_itemsets(ept, pattern, df_patterns, n_top):
@@ -76,11 +83,12 @@ def prediction(ntop_start, ntop_end, penalization, df_val, ept):
         confidence_total = 0
         unpredictable = 0
         cases = 0
-
+        df_result = ''
         for i in range(len(df_val)):
             pattern = df_val.iloc[i, 6]
             if len(pattern) >= 1:
                 if ept.is_pattern(pattern):
+                    # print("pass")
                     # print("\n")
                     # print("- Target Pattern:", pattern)
                     validate_pattern = df_val.iloc[i, 5]
@@ -122,7 +130,7 @@ def prediction(ntop_start, ntop_end, penalization, df_val, ept):
                         # print("- Prediction candidates: ", lm)
 
                         div_1 = len(set(validate_pattern) & set(lm))
-                        print("div 1: ", set(validate_pattern) & set(lm), div_1)
+                        # print("div 1: ", set(validate_pattern) & set(lm), div_1)
                         if div_1 > 0:
                             confidence_total = confidence_total + 1
                         else:
@@ -130,7 +138,7 @@ def prediction(ntop_start, ntop_end, penalization, df_val, ept):
                             lm_aux = list(map(lambda st: str.replace(st, "-", ""), lm_aux))
                            
                             div_aux = len(set(validate_pattern) & set(lm_aux))
-                            print("div aux: ", set(validate_pattern) & set(lm_aux), div_aux)
+                            # print("div aux: ", set(validate_pattern) & set(lm_aux), div_aux)
                             if div_aux > 0:
                                 confidence_total = confidence_total + (1 - penalization)
                     elif type(df_result) == bool:

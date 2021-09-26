@@ -2,16 +2,13 @@
 
 import coppredict.util as util
 import pandas as pd
-from ast import literal_eval
 
 
 def load_patterns_file(path, filename):
     path_res = '%s/%s' % (path, filename)
     df_patterns = util.extract_patterns(path_res)
-    df_patterns['patterns'] = df_patterns.patterns.apply(lambda x: literal_eval(str(x)))
     df_patterns['len'] = df_patterns['patterns'].str.len()
-    df_patterns = df_patterns.sort_values(by='len', ascending=False)
-    df_patterns.reset_index(drop=True)
+    df_patterns = df_patterns.sort_values(by='len', ascending=False).reset_index(drop=True)
 
     return df_patterns
 
