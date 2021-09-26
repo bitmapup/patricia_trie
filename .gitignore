@@ -1,0 +1,10 @@
+*.pyc
+*.conf
+*.ipynb_checkpoints
+*.log
+.idea/
+.vscode/
+.ipynb_checkpoints/
+.spyproject/
+.pylint.d/
+__pycache__/
