@@ -3,3 +3,4 @@ numpy
 psutil
 ipython
 wheel
+setuptools
